@@ -1,0 +1,38 @@
+# Symbol Scanner Criteria
+#
+# Placeholder configuration for Milestone 0.
+# Universe builder and filters implemented in Milestone 3.
+
+version: "0.1"
+status: placeholder
+
+universe:
+  exchange: binance
+  market_type: spot
+  quote_currency: USDT
+  top_n: 200
+  rank_by: quote_volume_24h        # Rank symbols by 24h quote volume (USDT)
+
+filters:
+  status: TRADING                  # Only actively trading pairs
+  min_volume_24h_usdt: 1000000     # Minimum $1M USDT 24h volume
+  min_price_usdt: 0.0001           # Avoid dust coins
+  exclude_stablecoin_pairs: true   # Exclude USDCUSDT, BUSDUSDT, etc.
+  min_candle_history_1d: 200       # Require at least 200 daily candles
+
+pre_filters:
+  # Cheap filters applied before expensive TA computation
+  min_volume_spike_ratio: 1.0      # No minimum spike in M0; tuned in M5
+  enabled: false                   # Pre-filters not active until M3
+
+schedules:
+  universe_scan_utc: "00:05"       # Build Top 200 universe
+  full_scan_utc: "00:10"           # Full analysis pipeline
+  daily_report_utc: "00:15"        # Generate daily report
+  confirmation_4h_offset_min: 5    # Run 5 min after 4H candle close
+  confirmation_1d_offset_min: 15   # Run 15 min after 1D candle close
+  intraday_refresh_min: 30         # Watchlist score refresh interval
+
+new_coin_detection:
+  enabled: true
+  compare_to: previous_day         # Diff today's Top 200 vs yesterday

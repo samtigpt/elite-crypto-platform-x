@@ -1,0 +1,60 @@
+# Alert Rules Configuration
+#
+# Placeholder configuration for Milestone 0.
+# Alert Engine implemented in Milestone 9.
+
+version: "0.1"
+status: placeholder
+
+defaults:
+  min_elite_score: 70              # Minimum score to trigger any alert
+  preferred_tiers: ["S", "A"]      # Default tier filter
+  channels: ["in_app"]             # Default delivery channels
+  watchlist_only: false
+
+triggers:
+  new_elite_setup:
+    enabled: true
+    condition: "elite_score >= 85 AND first_appearance_today"
+    channels: ["in_app", "email"]
+    priority: high
+
+  score_jump:
+    enabled: true
+    condition: "score_delta >= 15 since last scan"
+    channels: ["in_app"]
+    priority: medium
+
+  breakout_confirmed:
+    enabled: true
+    condition: "breakout_hunter_positive AND 4h_confirmation"
+    channels: ["in_app"]
+    priority: high
+
+  entry_zone_reached:
+    enabled: true
+    condition: "price enters entry_zone"
+    channels: ["in_app", "email"]
+    priority: high
+
+  new_top200_entrant:
+    enabled: true
+    condition: "symbol newly entered daily universe"
+    channels: ["in_app"]
+    priority: low
+
+  daily_report_ready:
+    enabled: true
+    condition: "report generated"
+    channels: ["in_app"]
+    priority: low
+
+deduplication:
+  same_symbol_same_type_hours: 4   # Max 1 alert per symbol+type per 4 hours
+  score_change_min_delta: 15       # Score jump alerts only if delta >= this
+  store_history: true              # Never re-alert on unchanged setup
+
+quiet_hours:
+  enabled: false
+  start_utc: "22:00"
+  end_utc: "06:00"
