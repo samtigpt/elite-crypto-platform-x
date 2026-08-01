@@ -1,0 +1,11 @@
+{
+  "name": "@ecpx/core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Core foundation package for ECPX",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  }
+}
